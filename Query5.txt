@@ -1,0 +1,25 @@
+-- Query 5: Recursive CTE (advanced)
+-- Traverse the semantic relation graph starting from 'slay'
+-- and find all terms reachable within 2 degrees of separation.
+-- ============================================================
+WITH RECURSIVE SemanticGraph(termId, path, depth) AS (
+    -- Base case: start from 'slay' (termId = 1)
+    SELECT t.termId, t.text, 0
+    FROM Term t
+    WHERE t.text = 'slay'
+
+    UNION ALL
+
+    -- Recursive case: follow semantic relations outward
+    SELECT t.termId, sg.path || ' -> ' || t.text, sg.depth + 1
+    FROM SemanticGraph sg
+    JOIN SemanticRelation sr ON sr.fromTermId = sg.termId
+    JOIN Term t ON t.termId = sr.toTermId
+    WHERE sg.depth < 2
+)
+SELECT DISTINCT
+    path AS semanticChain,
+    depth AS degreesFromSlay
+FROM SemanticGraph
+WHERE depth > 0
+ORDER BY depth, path;

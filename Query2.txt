@@ -1,0 +1,15 @@
+-- Query 2: Subquery
+-- Find all terms that are more difficult than the average
+-- difficulty rating across all terms in the database.
+-- ============================================================
+SELECT
+    t.text AS term,
+    t.difficultyRating,
+    t.trendingStatus,
+    o.name AS origin
+FROM Term t
+JOIN Origin o ON t.originId = o.originId
+WHERE t.difficultyRating > (
+    SELECT AVG(difficultyRating) FROM Term
+)
+ORDER BY t.difficultyRating DESC;

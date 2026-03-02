@@ -1,0 +1,16 @@
+-- Query 4: Complex search criterion (multiple logical connectors)
+-- Find all terms that are either Peak or Rising in trending status,
+-- have a popularity score above 8.0, and are used globally or in the UK.
+-- ============================================================
+SELECT DISTINCT
+    t.text AS term,
+    t.trendingStatus,
+    t.popularityScore,
+    r.regionName
+FROM Term t
+JOIN TermRegion tr ON t.termId = tr.termId
+JOIN Region r ON tr.regionId = r.regionId
+WHERE (t.trendingStatus = 'Peak' OR t.trendingStatus = 'Rising')
+    AND t.popularityScore > 8.0
+    AND (r.regionName = 'Global' OR r.regionName = 'UK')
+ORDER BY t.popularityScore DESC;

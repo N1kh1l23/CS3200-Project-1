@@ -1,0 +1,14 @@
+-- Query 3: GROUP BY with HAVING clause
+-- Find all cultural origins that have more than one slang term,
+-- along with the average popularity score of their terms.
+-- ============================================================
+SELECT
+    o.name AS origin,
+    o.cultureGroup,
+    COUNT(t.termId) AS termCount,
+    ROUND(AVG(t.popularityScore), 2) AS avgPopularity
+FROM Origin o
+JOIN Term t ON t.originId = o.originId
+GROUP BY o.originId
+HAVING COUNT(t.termId) > 1
+ORDER BY avgPopularity DESC;

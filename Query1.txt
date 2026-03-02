@@ -1,0 +1,15 @@
+-- Query 1: Join of at least 3 tables
+-- Get all slang terms with their definitions and cultural origin,
+-- showing the full context of each term in the lexicon.
+-- ============================================================
+SELECT
+    t.text AS term,
+    o.name AS origin,
+    o.cultureGroup,
+    d.text AS definition,
+    d.partOfSpeech,
+    t.trendingStatus
+FROM Term t
+JOIN Origin o ON t.originId = o.originId
+JOIN Definition d ON d.termId = t.termId
+ORDER BY t.popularityScore DESC;
